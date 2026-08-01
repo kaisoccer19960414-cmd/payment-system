@@ -1,6 +1,9 @@
 package com.example.payment.service;
 
+import com.example.payment.entity.Product;
 import com.example.payment.entity.User;
+import com.example.payment.exception.PaymentException;
+import com.example.payment.repository.ProductRepository;
 import com.example.payment.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,17 +21,24 @@ class PaymentServiceTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ProductRepository productRepository;
+
     private Long userId;
+    private Long productId;
 
     @BeforeEach
     void setUp() {
-        User user = userRepository.save(new User(null, "テスト太郎", 1000));
+        User user = userRepository.save(new User(null, "テスト太郎", 1000, "dummy"));
         userId = user.getId();
+
+        Product product = productRepository.save(new Product(null, "テスト商品", 1000, 10, null));
+        productId = product.getId();
     }
 
     @Test
     void 残高が足りていれば購入に成功し残高が減る() {
-        paymentService.purchase(userId);
+        paymentService.purchase(userId, productId, 1);
 
         User updated = userRepository.findById(userId).orElseThrow();
         assertEquals(0, updated.getBalance());
@@ -40,7 +50,7 @@ class PaymentServiceTest {
         user.setBalance(500);
         userRepository.save(user);
 
-        assertThrows(IllegalStateException.class, () -> paymentService.purchase(userId));
+        assertThrows(PaymentException.class, () -> paymentService.purchase(userId, productId, 1));
 
         User unchanged = userRepository.findById(userId).orElseThrow();
         assertEquals(500, unchanged.getBalance());
