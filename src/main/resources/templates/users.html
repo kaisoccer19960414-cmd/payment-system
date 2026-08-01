@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>ユーザー一覧</title></head>
+<body>
+<h1>ユーザー一覧</h1>
+<table border="1">
+    <tr><th>ID</th><th>名前</th><th>残高</th></tr>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.balance}"></td>
+        <td><a th:href="@{/purchase/{id}(id=${user.id})}">購入</a></td>
+    </tr>
+</table>
+</body>
+</html>

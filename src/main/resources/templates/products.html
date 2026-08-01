@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>商品一覧</title></head>
+<body>
+<h1>商品一覧</h1>
+<table border="1">
+    <tr><th>ID</th><th>商品名</th><th>価格</th><th>在庫</th></tr>
+    <tr th:each="p : ${products}">
+        <td th:text="${p.id}"></td>
+        <td th:text="${p.name}"></td>
+        <td th:text="${p.price}"></td>
+        <td th:text="${p.stock}"></td>
+    </tr>
+</table>
+</body>
+</html>

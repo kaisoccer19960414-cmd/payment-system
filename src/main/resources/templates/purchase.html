@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>購入画面</title></head>
+<body>
+<h1>購入画面</h1>
+<p th:text="${user.name} + 'さんの残高: ' + ${user.balance} + '円'"></p>
+
+<p th:if="${error}" th:text="${error}" style="color:red;"></p>
+
+<form th:action="@{/purchase/{id}(id=${user.id})}" method="post">
+    <select name="productId">
+        <option th:each="p : ${products}"
+                th:value="${p.id}"
+                th:text="${p.name} + '(' + ${p.price} + '円 / 在庫' + ${p.stock} + ')'">
+        </option>
+    </select>
+    <input type="number" name="quantity" value="1" min="1">
+    <button type="submit">購入する</button>
+</form>
+</body>
+</html>
