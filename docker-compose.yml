@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_DB: paymentdb
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5432:5432"
 
@@ -17,4 +17,4 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/paymentdb
       SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
