@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.Map;
 import java.util.NoSuchElementException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -30,5 +31,14 @@ public class GlobalExceptionHandler {
         }
         model.addAttribute("message", message);
         return "error";
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Object handleValidation(MethodArgumentNotValidException e, Model model, HttpServletRequest request) {
+        String message = e.getBindingResult().getFieldErrors().stream()
+                .findFirst()
+                .map(err -> err.getDefaultMessage())
+                .orElse("入力内容に誤りがあります");
+        return respond(message, model, request);
     }
 }

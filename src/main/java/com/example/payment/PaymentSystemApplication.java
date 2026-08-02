@@ -17,9 +17,9 @@ public class PaymentSystemApplication {
 	CommandLineRunner initData(com.example.payment.repository.UserRepository userRepository, com.example.payment.repository.ProductRepository productRepository, PasswordEncoder encoder) {
 		return args -> {
 			if (userRepository.count() == 0) {
-				userRepository.save(new com.example.payment.entity.User(null, "田中", 5000, encoder.encode("password1")));
-				userRepository.save(new com.example.payment.entity.User(null, "佐藤", 500, encoder.encode("password2")));
-				userRepository.save(new com.example.payment.entity.User(null, "鈴木", 0, encoder.encode("password3")));
+				userRepository.save(new com.example.payment.entity.User(null, "田中", 5000, encoder.encode("password1"), "ADMIN"));
+				userRepository.save(new com.example.payment.entity.User(null, "佐藤", 500, encoder.encode("password2"), "USER"));
+				userRepository.save(new com.example.payment.entity.User(null, "鈴木", 0, encoder.encode("password3"), "USER"));
 			}
 			if (productRepository.count() == 0) {
 				productRepository.save(new com.example.payment.entity.Product(null, "サンプル商品", 1000, 10, null));

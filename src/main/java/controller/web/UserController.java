@@ -12,6 +12,8 @@ import com.example.payment.dto.response.UserView;
 import java.util.List;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestParam;
+import jakarta.validation.Valid;
+import com.example.payment.dto.request.PurchaseRequest;
 
 import java.util.concurrent.*;//test
 
@@ -38,6 +40,16 @@ public class UserController {
     @GetMapping("/")
     public String index() {
         return "redirect:/users";
+    }
+
+
+    @GetMapping("/admin/products")
+    public String adminProducts(Model model) {
+        var products = productRepository.findAll().stream()
+                .map(productMapper::toView)
+                .toList();
+        model.addAttribute("products", products);
+        return "admin-products";
     }
 
 
@@ -76,8 +88,7 @@ public class UserController {
 
     @PostMapping("/purchase/{userId}")
     public String doPurchase(@PathVariable Long userId,
-                             @RequestParam Long productId,
-                             @RequestParam Integer quantity,
+                             @Valid PurchaseRequest request,
                              Authentication authentication) {
         String loginName = authentication.getName();
         User loginUser = userRepository.findByName(loginName).orElseThrow();
@@ -86,7 +97,7 @@ public class UserController {
             throw new PaymentException("自分以外のアカウントで購入することはできません");
         }
 
-        paymentService.purchase(userId, productId, quantity);
+        paymentService.purchase(userId, request.getProductId(), request.getQuantity());
         return "redirect:/users";
     }
 

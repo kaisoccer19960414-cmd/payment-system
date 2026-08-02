@@ -1,9 +1,11 @@
 package com.example.payment.controller.api;
 
 
+import com.example.payment.dto.request.PurchaseRequest;
 import com.example.payment.dto.response.UserView;
 import com.example.payment.repository.UserRepository;
 import com.example.payment.service.PaymentService;
+import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,12 +34,14 @@ public class ApiController {
     }
 
     @PostMapping("/purchase/{userId}")
-    public String purchase(@PathVariable Long userId, Authentication authentication) {
+    public String purchase(@PathVariable Long userId,
+                           @Valid @RequestBody PurchaseRequest request,
+                           Authentication authentication) {
         var loginUser = userRepository.findByName(authentication.getName()).orElseThrow();
         if (!loginUser.getId().equals(userId)) {
             return "自分以外のアカウントで購入することはできません";
         }
-        paymentService.purchase(userId, 1L, 1);
+        paymentService.purchase(userId, request.getProductId(), request.getQuantity());
         return "購入が完了しました";
     }
 }
