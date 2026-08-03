@@ -25,14 +25,16 @@ public class UserController {
     private final com.example.payment.mapper.UserMapper userMapper;
     private final com.example.payment.repository.ProductRepository productRepository;
     private final com.example.payment.mapper.ProductMapper productMapper;
+    private final com.example.payment.repository.OrderRepository orderRepository;
 
     // コンストラクタインジェクション
-    public UserController(UserRepository userRepository, com.example.payment.service.PaymentService paymentService, com.example.payment.mapper.UserMapper userMapper, com.example.payment.repository.ProductRepository productRepository, com.example.payment.mapper.ProductMapper productMapper) {
+    public UserController(UserRepository userRepository, com.example.payment.service.PaymentService paymentService, com.example.payment.mapper.UserMapper userMapper, com.example.payment.repository.ProductRepository productRepository, com.example.payment.mapper.ProductMapper productMapper, com.example.payment.repository.OrderRepository orderRepository) {
         this.userRepository = userRepository;
         this.paymentService = paymentService;
         this.userMapper = userMapper;
         this.productRepository=productRepository;
         this.productMapper=productMapper;
+        this.orderRepository = orderRepository;
 
 
     }
@@ -123,6 +125,13 @@ public class UserController {
         latch.await();
         executor.shutdown();
         return "redirect:/users";
+    }
+
+    @GetMapping("/orders/{userId}")
+    public String listOrders(@PathVariable Long userId, Model model) {
+        var orders = orderRepository.findByUserIdWithItems(userId);
+        model.addAttribute("orders", orders);
+        return "orders";
     }
 
 }

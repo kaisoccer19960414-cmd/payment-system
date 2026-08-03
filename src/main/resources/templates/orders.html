@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>注文履歴</title></head>
+<body>
+<h1>注文履歴</h1>
+<div th:each="order : ${orders}">
+    <p>注文ID: <span th:text="${order.id}"></span> / 合計: <span th:text="${order.totalPrice}"></span>円</p>
+    <ul>
+        <li th:each="item : ${order.items}">
+            商品ID: <span th:text="${item.productId}"></span> ×
+            <span th:text="${item.quantity}"></span>個
+        </li>
+    </ul>
+</div>
+</body>
+</html>

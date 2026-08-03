@@ -23,7 +23,7 @@ public class Order {
     private LocalDateTime orderedAt;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderItem> items = new ArrayList<>();
+    private List<com.example.payment.entity.OrderItem> items = new ArrayList<>();
 
     public Order(Long userId, Integer totalPrice, LocalDateTime orderedAt) {
         this.userId = userId;
@@ -31,7 +31,7 @@ public class Order {
         this.orderedAt = orderedAt;
     }
 
-    public void addItem(OrderItem item) {
+    public void addItem(com.example.payment.entity.OrderItem item) {
         items.add(item);
         item.setOrder(this);
     }

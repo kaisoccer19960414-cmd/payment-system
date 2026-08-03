@@ -8,6 +8,8 @@ import com.example.payment.service.PaymentService;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 
 import java.util.List;
@@ -27,10 +29,9 @@ public class ApiController {
     }
 
     @GetMapping("/users")
-    public List<UserView> listUsers() {
-        return userRepository.findAll().stream()
-                .map(u -> userMapper.toView(u))
-                .toList();
+    public Page<UserView> listUsers(Pageable pageable) {
+        return userRepository.findAll(pageable)
+                .map(userMapper::toView);
     }
 
     @PostMapping("/purchase/{userId}")

@@ -16,7 +16,7 @@ public class OrderItem {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    private Order order;
+    private com.example.payment.entity.Order order;
 
     private Long productId;
     private Integer quantity;
@@ -28,7 +28,7 @@ public class OrderItem {
         this.price = price;
     }
 
-    void setOrder(Order order) {
+    void setOrder(com.example.payment.entity.Order order) {
         this.order = order;
     }
 }
