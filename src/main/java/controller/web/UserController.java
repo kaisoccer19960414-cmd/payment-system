@@ -47,13 +47,12 @@ public class UserController {
 
     @GetMapping("/admin/products")
     public String adminProducts(Model model) {
-        var products = productRepository.findAll().stream()
+        var products = productRepository.findByActiveTrue().stream()
                 .map(productMapper::toView)
                 .toList();
         model.addAttribute("products", products);
         return "admin-products";
     }
-
 
 
     @GetMapping("/users")
@@ -67,7 +66,7 @@ public class UserController {
 
     @GetMapping("/products")
     public String listProducts(Model model) {
-        var products = productRepository.findAll().stream()
+        var products = productRepository.findByActiveTrue().stream()
                 .map(productMapper::toView)
                 .toList();
         model.addAttribute("products", products);
@@ -79,7 +78,7 @@ public class UserController {
         User user = userRepository.findById(userId).orElseThrow();
         UserView userView = userMapper.toView(user);
 
-        var products = productRepository.findAll().stream()
+        var products = productRepository.findByActiveTrue().stream()
                 .map(productMapper::toView)
                 .toList();
 

@@ -22,8 +22,8 @@ public class PaymentSystemApplication {
 				userRepository.save(new com.example.payment.entity.User(null, "鈴木", 0, encoder.encode("password3"), "USER"));
 			}
 			if (productRepository.count() == 0) {
-				productRepository.save(new com.example.payment.entity.Product(null, "サンプル商品", 1000, 10, null));
-				productRepository.save(new com.example.payment.entity.Product(null, "プレミアム商品", 3000, 5, null));
+				productRepository.save(new com.example.payment.entity.Product(null, "サンプル商品", 1000, 10, null, true));
+				productRepository.save(new com.example.payment.entity.Product(null, "プレミアム商品", 3000, 5, null, true));
 			}
 		};
 	}

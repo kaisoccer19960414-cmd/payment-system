@@ -59,8 +59,8 @@ class RandomChaosTest {
         initialBalances.put(userB.getId(), userB.getBalance());
         initialBalances.put(userC.getId(), userC.getBalance());
 
-        Product productX = productRepository.save(new Product(null, "商品X", 1000, 100, null));
-        Product productY = productRepository.save(new Product(null, "商品Y", 3000, 100, null));
+        Product productX = productRepository.save(new Product(null, "商品X", 1000, 100, null,true));
+        Product productY = productRepository.save(new Product(null, "商品Y", 3000, 100, null,true));
 
         List<Long> productIds = List.of(productX.getId(), productY.getId());
 

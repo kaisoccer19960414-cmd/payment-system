@@ -44,7 +44,7 @@ class PaymentServiceTest {
         User user = userRepository.save(new User(null, "テスト太郎", 1000, "dummy", "USER"));
         userId = user.getId();
 
-        Product product = productRepository.save(new Product(null, "テスト商品", 1000, 10, null));
+        Product product = productRepository.save(new Product(null, "テスト商品", 1000, 10, null,true));
         productId = product.getId();
     }
 

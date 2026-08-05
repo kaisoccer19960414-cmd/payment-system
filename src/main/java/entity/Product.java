@@ -5,6 +5,7 @@ import jakarta.persistence.Version;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "products")
@@ -17,12 +18,15 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     private String name;
+    @Setter
     private Integer price;
+    @Setter
     private Integer stock;
     @Version
     private Long version;
-    public void setStock(Integer stock) {
-        this.stock = stock;
-    }
+    @Setter
+    private boolean active = true;
+
 }
