@@ -9,15 +9,17 @@
 <table class="table table-striped table-bordered">
     <thead class="table-dark">
     <tr><th>ID</th><th>名前</th><th>残高</th><th></th></tr>
-    </thead>
-    <tbody>
-    <tr th:each="user : ${users}">
-        <td th:text="${user.id}"></td>
-        <td th:text="${user.name}"></td>
-        <td th:text="${user.balance}"></td>
-        <td><a th:href="@{/purchase/{id}(id=${user.id})}" class="btn btn-sm btn-primary">購入</a></td>
-    </tr>
-    </tbody>
+    </thead><tbody>
+<tr th:each="user : ${users}">
+    <td th:text="${user.id}"></td>
+    <td th:text="${user.name}"></td>
+    <td th:text="${user.balance}"></td>
+    <td>
+        <a th:href="@{/purchase/{id}(id=${user.id})}" class="btn btn-sm btn-primary">購入</a>
+        <a th:href="@{/orders/{id}(id=${user.id})}" class="btn btn-sm btn-outline-secondary">履歴</a>
+    </td>
+</tr>
+</tbody>
 </table>
 </body>
 </html>

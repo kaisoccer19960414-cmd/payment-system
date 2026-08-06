@@ -8,6 +8,7 @@ import com.example.payment.repository.ProductRepository;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.payment.exception.ProductException;
 
 @Service
 public class ProductService {
@@ -58,13 +59,13 @@ public class ProductService {
             int newStock = product.getStock() + request.getQuantity();
 
             if (newStock < 0) {
-                throw new IllegalStateException("在庫がマイナスになるため変更できません(現在庫: " + product.getStock() + ")");
+                throw new ProductException("在庫がマイナスになるため変更できません(現在庫: " + product.getStock() + ")");
             }
 
             product.setStock(newStock);
             return productRepository.saveAndFlush(product);
         } catch (ObjectOptimisticLockingFailureException e) {
-            throw new IllegalStateException("他の操作と競合しました。もう一度お試しください");
+            throw new ProductException("他の操作と競合しました。もう一度お試しください");
         }
     }
 

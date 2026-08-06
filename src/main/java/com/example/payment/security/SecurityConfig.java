@@ -24,6 +24,7 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/actuator/health").permitAll()  // ← 追加
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/signup").permitAll()  // 追加
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form.permitAll())

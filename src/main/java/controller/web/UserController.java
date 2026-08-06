@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import jakarta.validation.Valid;
 import com.example.payment.dto.request.PurchaseRequest;
 
+
 import java.util.concurrent.*;//test
 
 @Controller
@@ -65,17 +66,35 @@ public class UserController {
     }
 
     @GetMapping("/products")
-    public String listProducts(Model model) {
-        var products = productRepository.findByActiveTrue().stream()
+    public String listProducts(@RequestParam(required = false) String keyword, Model model) {
+        List<com.example.payment.entity.Product> productList;
+        if (keyword != null && !keyword.isBlank()) {
+            productList = productRepository.findByActiveTrueAndNameContaining(keyword);
+        } else {
+            productList = productRepository.findByActiveTrue();
+        }
+
+        var products = productList.stream()
                 .map(productMapper::toView)
                 .toList();
+
         model.addAttribute("products", products);
+        model.addAttribute("keyword", keyword);
         return "products";
+    }
+
+    @GetMapping("/products/{id}")
+    public String productDetail(@PathVariable Long id, Model model) {
+        var product = productRepository.findById(id)
+                .orElseThrow(() -> new java.util.NoSuchElementException("指定された商品が見つかりません"));
+        model.addAttribute("product", productMapper.toView(product));
+        return "product-detail";
     }
 
     @GetMapping("/purchase/{userId}")
     public String purchasePage(@PathVariable Long userId, Model model) {
-        User user = userRepository.findById(userId).orElseThrow();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new java.util.NoSuchElementException("指定されたユーザーが見つかりません"));
         UserView userView = userMapper.toView(user);
 
         var products = productRepository.findByActiveTrue().stream()
@@ -87,12 +106,34 @@ public class UserController {
         return "purchase";
     }
 
+    @PostMapping("/purchase/{userId}/confirm")
+    public String confirmPurchase(@PathVariable Long userId,
+                                  @Valid PurchaseRequest request,
+                                  Authentication authentication,
+                                  Model model) {
+        User loginUser = userRepository.findByName(authentication.getName()).orElseThrow();
+        if (!loginUser.getId().equals(userId)) {
+            throw new PaymentException("自分以外のアカウントで購入することはできません");
+        }
+
+        var product = productRepository.findById(request.getProductId())
+                .orElseThrow(() -> new java.util.NoSuchElementException("指定された商品が見つかりません"));
+        int totalPrice = product.getPrice() * request.getQuantity();
+
+        model.addAttribute("userId", userId);
+        model.addAttribute("productName", product.getName());
+        model.addAttribute("price", product.getPrice());
+        model.addAttribute("quantity", request.getQuantity());
+        model.addAttribute("productId", request.getProductId());
+        model.addAttribute("totalPrice", totalPrice);
+        return "purchase-confirm";
+    }
+
     @PostMapping("/purchase/{userId}")
     public String doPurchase(@PathVariable Long userId,
                              @Valid PurchaseRequest request,
                              Authentication authentication) {
-        String loginName = authentication.getName();
-        User loginUser = userRepository.findByName(loginName).orElseThrow();
+        User loginUser = userRepository.findByName(authentication.getName()).orElseThrow();
 
         if (!loginUser.getId().equals(userId)) {
             throw new PaymentException("自分以外のアカウントで購入することはできません");

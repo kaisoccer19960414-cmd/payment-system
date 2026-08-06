@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import com.example.payment.dto.request.StockAdjustRequest;
+import com.example.payment.exception.ProductException;
 
 @Controller
 public class AdminProductController {
@@ -82,7 +83,7 @@ public class AdminProductController {
 
         try {
             productService.adjustStock(id, stockAdjustRequest);
-        } catch (IllegalStateException e) {
+        } catch (ProductException e) {
             model.addAttribute("productId", id);
             model.addAttribute("productName", product.getName());
             model.addAttribute("currentStock", product.getStock());

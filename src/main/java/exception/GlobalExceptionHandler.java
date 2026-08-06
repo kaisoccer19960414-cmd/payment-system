@@ -11,17 +11,24 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import com.example.payment.exception.ProductException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoSuchElementException.class)
-    public Object handleNotFound(Model model, HttpServletRequest request) {
-        return respond("指定されたユーザーが見つかりません", model, request);
+    public Object handleNotFound(NoSuchElementException e, Model model, HttpServletRequest request) {
+        String message = e.getMessage() != null ? e.getMessage() : "データが見つかりません";
+        return respond(message, model, request);
     }
 
     @ExceptionHandler(PaymentException.class)
     public Object handlePayment(PaymentException e, Model model, HttpServletRequest request) {
+        return respond(e.getMessage(), model, request);
+    }
+
+    @ExceptionHandler(ProductException.class)
+    public Object handleProduct(ProductException e, Model model, HttpServletRequest request) {
         return respond(e.getMessage(), model, request);
     }
 

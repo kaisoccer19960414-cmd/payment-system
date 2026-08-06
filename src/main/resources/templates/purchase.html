@@ -10,7 +10,7 @@
 
 <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
-<form th:action="@{/purchase/{id}(id=${user.id})}" method="post" class="row g-3 align-items-center">
+<form th:action="@{/purchase/{id}/confirm(id=${user.id})}" method="post">
     <div class="col-auto">
         <select name="productId" class="form-select">
             <option th:each="p : ${products}"
@@ -26,5 +26,21 @@
         <button type="submit" class="btn btn-success">購入する</button>
     </div>
 </form>
+
+<form th:action="@{/cart/add}" method="post" class="row g-3 align-items-center mt-3">
+    <input type="hidden" name="productId" th:value="${p.id}" th:each="p : ${products}" th:if="false">
+    <div class="col-auto">
+        <select name="productId" class="form-select">
+            <option th:each="p : ${products}" th:value="${p.id}" th:text="${p.name}"></option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <input type="number" name="quantity" value="1" min="1" class="form-control" style="width: 100px;">
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-outline-primary">カートに追加</button>
+    </div>
+</form>
+<a th:href="@{/cart}" class="btn btn-link mt-2">カートを見る</a>
 </body>
 </html>
